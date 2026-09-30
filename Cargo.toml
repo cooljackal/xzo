@@ -1,0 +1,43 @@
+[package]
+name = "xzo"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "An exoskeleton for your language model: long conversations stop forgetting."
+repository = "https://github.com/cooljackal/xzo"
+readme = "README.md"
+
+[lib]
+name = "xzo"
+path = "src/lib.rs"
+
+[[bin]]
+name = "xzo"
+path = "src/main.rs"
+
+[features]
+default = ["semantic"]
+# The embedding model used to search stored conversation (all-MiniLM-L6-v2, ~90 MB, downloaded on
+# first run). Without it xzo falls back to a much cruder hashed matcher.
+semantic = ["dep:fastembed"]
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = "0.7"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+sqlite-vec = "0.1"
+# Local prompt token counting (XZO_TOKENIZER). Same version and features fastembed already uses.
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+fastembed = { version = "4", optional = true }
+futures = "0.3.32"
+async-trait = "0.1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

@@ -1,0 +1,10 @@
+/target
+
+# The embedding model, downloaded on first run.
+/.fastembed_cache
+
+# The conversation store. It holds conversation text in plaintext; never commit it.
+*.sqlite
+*.sqlite-*
+
+*.log
